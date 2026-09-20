@@ -1,0 +1,2 @@
+/* GET travel view */
+const travel = (req, res

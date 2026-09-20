@@ -1,0 +1,17 @@
+<div id="contents">
+    <div id="tagline" class="clearfix">
+        <h1>Travel</h1>
+        <div>
+            <h2>{{title}}</h2>
+            <ul id="sites">
+                {{#each trips}}
+                <li>
+                    <a href="/travel"><img src="images/{{this.image}}" alt="{{this.name}}"></a>
+                    <h2><a href="/travel">{{this.name}}</a></h2>
+                    <p>{{{this.description}}}</p>
+                </li>
+                {{/each}}
+            </ul>
+        </div>
+    </div>
+</div>
