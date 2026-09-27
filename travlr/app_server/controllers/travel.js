@@ -1,24 +1,14 @@
+const fs = require('fs');
+const path = require('path');
+
+// Read and parse trips data from JSON file
+const trips = JSON.parse(fs.readFileSync(path.join(__dirname, '../data/trips.json'), 'utf8'));
+
 /* GET travel view */
 const travel = (req, res) => {
     res.render('travel', {
         title: 'Travlr Getaways',
-        trips: [
-            {
-                name: 'Gale Reef',
-                image: 'reef1.jpg',
-                description: 'Gale Reef - Sed et augue eget diam gravida accumsan. Pellentesque sit amet felis nulla. Mauris ac lectus ante.'
-            },
-            {
-                name: 'Dawson’s Reef',
-                image: 'reef2.jpg',
-                description: 'Dawson’s Reef - Integer magna leo, posuere et dignissim vitae, porttitor at odio. Pellentesque a metus nec magna placerat.'
-            },
-            {
-                name: 'Claire’s Reef',
-                image: 'reef3.jpg',
-                description: 'Claire’s Reef - Donec viverra auctor lobortis. Pellentesque eu est a nulla placerat dignissim.'
-            }
-        ]
+        trips: trips
     });
 };
 
