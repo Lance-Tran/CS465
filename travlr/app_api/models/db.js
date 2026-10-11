@@ -1,60 +1,59 @@
-const mongoose = require('mongoose');
-const readline = require('readline');
+﻿const mongoose = require('mongoose');
+const host = process.env.DB_HOST || '127.0.0.1';
+const dbURI = 'mongodb://' + host + '/travlr';
+const readLine = require('readline');
 
-// Connection URI to local MongoDB instance
-const dbURI = 'mongodb://127.0.0.1:27017/travlr';
-mongoose.connect(dbURI);
+mongoose.set('strictQuery', false);
 
-// Connection Events
+const connect = () => {
+  setTimeout(() => mongoose.connect(dbURI, {}), 1000);
+};
+
 mongoose.connection.on('connected', () => {
-    console.log(`Mongoose connected to ${dbURI}`);
+  console.log('Mongoose connected to ' + dbURI);
 });
 
-mongoose.connection.on('error', (err) => {
-    console.log(`Mongoose connection error: ${err}`);
+mongoose.connection.on('error', err => {
+  console.log('Mongoose connection error: ', err);
 });
 
 mongoose.connection.on('disconnected', () => {
-    console.log('Mongoose disconnected');
+  console.log('Mongoose disconnected');
 });
 
-// Windows Cross-Platform POSIX Emulation
 if (process.platform === 'win32') {
-    const rl = readline.createInterface({
-        input: process.stdin,
-        output: process.stdout
-    });
-    rl.on('SIGINT', () => {
-        process.emit('SIGINT');
-    });
+  const rl = readLine.createInterface({
+    input: process.stdin,
+    output: process.stdout
+  });
+  rl.on('SIGINT', () => {
+    process.emit('SIGINT');
+  });
 }
 
-// Graceful Shutdown Helper
-const gracefulShutdown = (msg, callback) => {
-    mongoose.connection.close().then(() => {
-        console.log(`Mongoose disconnected through ${msg}`);
-        callback();
-    });
+const gracefulShutdown = (msg) => {
+  return mongoose.connection.close().then(() => {
+    console.log('Mongoose disconnected through ' + msg);
+  });
 };
 
-// Signal Interception Listeners
 process.once('SIGUSR2', () => {
-    gracefulShutdown('nodemon restart', () => {
-        process.kill(process.pid, 'SIGUSR2');
-    });
+  gracefulShutdown('nodemon restart').then(() => {
+    process.kill(process.pid, 'SIGUSR2');
+  });
 });
 
 process.on('SIGINT', () => {
-    gracefulShutdown('app termination', () => {
-        process.exit(0);
-    });
+  gracefulShutdown('app termination').then(() => {
+    process.exit(0);
+  });
 });
 
 process.on('SIGTERM', () => {
-    gracefulShutdown('app shutdown', () => {
-        process.exit(0);
-    });
+  gracefulShutdown('app shutdown').then(() => {
+    process.exit(0);
+  });
 });
 
-// Bring in the Schema & Model definition
+connect();
 require('./travlr');

@@ -1,42 +1,14 @@
-const mongoose = require('mongoose');
+﻿const mongoose = require('mongoose');
 
-// Define Trip Schema
 const tripSchema = new mongoose.Schema({
-    code: {
-        type: String,
-        required: true,
-        index: true
-    },
-    name: {
-        type: String,
-        required: true,
-        index: true
-    },
-    length: {
-        type: String,
-        required: true
-    },
-    start: {
-        type: Date,
-        required: true
-    },
-    resort: {
-        type: String,
-        required: true
-    },
-    perPerson: {
-        type: String,
-        required: true
-    },
-    image: {
-        type: String,
-        required: true
-    },
-    description: {
-        type: String,
-        required: true
-    }
+    code: { type: String, required: true, index: true },
+    name: { type: String, required: true, index: true },
+    length: { type: String, required: true },
+    start: { type: Date, required: true },
+    resort: { type: String, required: true },
+    perPerson: { type: String, required: true },
+    image: { type: String, required: true },
+    description: { type: String, required: true }
 });
 
-// Compile Schema into Model (maps to 'trips' collection)
-module.exports = mongoose.model('trips', tripSchema);
+mongoose.model('trips', tripSchema);
